@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Video-based Tutorial</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    :root {
+      --bg: #090d18;
+      --bg2: #111827;
+      --card: #151d2e;
+      --card-hover: #1d2940;
+      --text: #ffffff;
+      --muted: #aeb8ca;
+      --blue: #4f8cff;
+      --purple: #9366ff;
+      --green: #36d399;
+      --orange: #ff9f43;
+      --red: #ff5d73;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(79,140,255,.18), transparent 25%),
+        radial-gradient(circle at top right, rgba(147,102,255,.14), transparent 25%),
+        var(--bg);
+
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* NAVBAR */
+
+    nav {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 7%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(9, 13, 24, 0.90);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: var(--blue);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      color: #d8deea;
+      text-decoration: none;
+      transition: .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--blue);
+    }
+
+    /* HERO */
+
+    .hero {
+      min-height: 520px;
+      padding: 90px 7% 60px;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-label {
+      display: inline-block;
+      color: #a9c7ff;
+      background: rgba(79,140,255,.13);
+      border: 1px solid rgba(79,140,255,.3);
+      padding: 8px 15px;
+      border-radius: 30px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+
+    .gradient {
+      background: linear-gradient(90deg, #63a0ff, #ac7cff);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      max-width: 650px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 17px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      border: none;
+      padding: 13px 22px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
+      transition: .25s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: white;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: white;
+      border: 1px solid var(--border);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* CODE BOX */
+
+    .code-window {
+      background: #0d1320;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,.3);
+    }
+
+    .code-top {
+      padding: 14px;
+      background: #141d2d;
+      display: flex;
+      gap: 7px;
+    }
+
+    .circle {
+      height: 12px;
+      width: 12px;
+      border-radius: 50%;
+    }
+
+    .c1 { background: #ff5f57; }
+    .c2 { background: #febc2e; }
+    .c3 { background: #28c840; }
+
+    pre {
+      padding: 28px;
+      overflow-x: auto;
+      color: #b9c7dd;
+      line-height: 1.7;
+    }
+
+    .code-blue { color: #6fa8ff; }
+    .code-purple { color: #c79aff; }
+    .code-green { color: #75e0a7; }
+    .code-orange { color: #ffc66d; }
+
+    /* STATS */
+
+    .stats {
+      width: 86%;
+      margin: 20px auto 80px;
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 25px;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat:last-child {
+      border: none;
+    }
+
+    .stat h2 {
+      color: var(--blue);
+      margin-bottom: 5px;
+    }
+
+    .stat p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* CONTENT */
+
+    .container {
+      width: 86%;
+      max-width: 1300px;
+      margin: auto;
+      padding-bottom: 80px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-title h2 {
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
+
+    .section-title p {
+      color: var(--muted);
+    }
+
+    /* SEARCH */
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 35px;
+      flex-wrap: wrap;
+    }
+
+    .search {
+      flex: 1;
+      min-width: 240px;
+      padding: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: white;
+      outline: none;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: var(--card);
+      padding: 11px 18px;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background: var(--blue);
+      color: white;
+    }
+
+    /* LEVEL */
+
+    .level-title {
+      margin: 45px 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .level-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .basic-dot { background: var(--green); }
+    .intermediate-dot { background: var(--orange); }
+    .advanced-dot { background: var(--red); }
+
+    /* CARDS */
+
+    .tutorial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      overflow: hidden;
+      transition: .3s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      background: var(--card-hover);
+      border-color: rgba(79,140,255,.4);
+    }
+
+    .thumbnail {
+      height: 170px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      font-size: 55px;
+    }
+
+    .html-bg {
+      background: linear-gradient(135deg, #ff6b35, #ff934f);
+    }
+
+    .java-bg {
+      background: linear-gradient(135deg, #4179cc, #6a55c9);
+    }
+
+    .play {
+      width: 60px;
+      height: 60px;
+      background: rgba(0,0,0,.45);
+      backdrop-filter: blur(6px);
+      position: absolute;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+    }
+
+    .card-content {
+      padding: 20px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      font-size: 11px;
+      border-radius: 20px;
+      padding: 5px 9px;
+      background: rgba(79,140,255,.13);
+      color: #a9c7ff;
+    }
+
+    .tag.basic {
+      background: rgba(54,211,153,.12);
+      color: #69e4b4;
+    }
+
+    .tag.intermediate {
+      background: rgba(255,159,67,.12);
+      color: #ffc17f;
+    }
+
+    .tag.advanced {
+      background: rgba(255,93,115,.12);
+      color: #ff91a0;
+    }
+
+    .card h3 {
+      margin-bottom: 9px;
+      font-size: 19px;
+    }
+
+    .card p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+      min-height: 67px;
+    }
+
+    .card-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #8793a7;
+      margin: 16px 0;
+    }
+
+    .watch-btn {
+      width: 100%;
+      padding: 11px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(79,140,255,.12);
+      color: #a9c7ff;
+      cursor: pointer;
+      transition: .2s;
+      font-weight: bold;
+    }
+
+    .watch-btn:hover {
+      background: var(--blue);
+      color: white;
+    }
+
+    /* PROGRESS */
+
+    .progress-section {
+      margin-top: 80px;
+      padding: 35px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: linear-gradient(
+        135deg,
+        rgba(79,140,255,.08),
+        rgba(147,102,255,.08)
+      );
+    }
+
+    .progress-section h2 {
+      margin-bottom: 8px;
+    }
+
+    .progress-section > p {
+      color: var(--muted);
+      margin-bottom: 25px;
+    }
+
+    .progress-bar {
+      height: 12px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #202a3c;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg,var(--blue),var(--purple));
+      transition: .4s;
+    }
+
+    #progressText {
+      margin-top: 10px;
+      color: #b8c5d8;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      padding: 35px;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width: 950px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .tutorial-grid {
+        grid-template-columns: repeat(2,1fr);
+      }
+
+      .stats {
+        grid-template-columns: repeat(2,1fr);
+      }
+    }
+
+    @media(max-width: 650px) {
+      nav {
+        padding: 0 5%;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 70px 5%;
+      }
+
+      .container {
+        width: 90%;
+      }
+
+      .tutorial-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        width: 90%;
+      }
+
+      .hero h1 {
+        font-size: 45px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+
+<nav>
+  <div class="logo">&lt;<span>CodeSkill</span>/&gt;</div>
+
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#tutorials">Tutorials</a></li>
+    <li><a href="#progress">Progress</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+
+  <div>
+    <div class="hero-label">💻 Learn • Practice • Build</div>
+
+    <h1>
+      Start Your
+      <span class="gradient">Coding Journey.</span>
+    </h1>
+
+    <p>
+      Learn web development and programming through organized
+      video tutorials. Start with the basics and continue until
+      you reach advanced HTML and Java programming.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#tutorials" class="btn btn-primary">
+        Start Learning
+      </a>
+
+      <a href="#progress" class="btn btn-secondary">
+        My Progress
+      </a>
+    </div>
+  </div>
+
+
+  <div class="code-window">
+
+    <div class="code-top">
+      <div class="circle c1"></div>
+      <div class="circle c2"></div>
+      <div class="circle c3"></div>
+    </div>
+
+<pre>
+<span class="code-purple">&lt;html&gt;</span>
+
+  <span class="code-purple">&lt;body&gt;</span>
+
+    <span class="code-blue">&lt;h1&gt;</span>
+      Hello, Programmer!
+    <span class="code-blue">&lt;/h1&gt;</span>
+
+    <span class="code-purple">&lt;script&gt;</span>
+
+      <span class="code-green">const</span> goal =
+      <span class="code-orange">"Become a Developer"</span>;
+
+      console.log(goal);
+
+    <span class="code-purple">&lt;/script&gt;</span>
+
+  <span class="code-purple">&lt;/body&gt;</span>
+
+<span class="code-purple">&lt;/html&gt;</span>
+</pre>
+
+  </div>
+
+</section>
+
+
+<!-- STATS -->
+
+<section class="stats">
+
+  <div class="stat">
+    <h2>18+</h2>
+    <p>Video Lessons</p>
+  </div>
+
+  <div class="stat">
+    <h2>2</h2>
+    <p>Programming Skills</p>
+  </div>
+
+  <div class="stat">
+    <h2>3</h2>
+    <p>Difficulty Levels</p>
+  </div>
+
+  <div class="stat">
+    <h2>100%</h2>
+    <p>Beginner Friendly</p>
+  </div>
+
+</section>
+
+
+<!-- TUTORIALS -->
+
+<main class="container" id="tutorials">
+
+  <div class="section-title">
+    <h2>Video Tutorials</h2>
+    <p>
+      Select a skill and progress from beginner to advanced.
+    </p>
+  </div>
+
+
+  <!-- SEARCH + FILTER -->
+
+  <div class="controls">
+
+    <input
+      type="text"
+      class="search"
+      id="searchInput"
+      placeholder="🔍 Search tutorials..."
+    >
+
+    <div class="filters">
+
+      <button
+        class="filter-btn active"
+        onclick="filterTutorials('all', this)"
+      >
+        All
+      </button>
+
+      <button
+        class="filter-btn"
+        onclick="filterTutorials('html', this)"
+      >
+        HTML
+      </button>
+
+      <button
+        class="filter-btn"
+        onclick="filterTutorials('java', this)"
+      >
+        Java
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- BASIC -->
+
+  <div class="level-title">
+    <div class="level-dot basic-dot"></div>
+    <h2>Basic</h2>
+  </div>
+
+  <div class="tutorial-grid">
+
+    <!-- HTML 1 -->
+
+    <div class="card tutorial"
+         data-category="html"
+         data-title="html introduction">
+
+      <div class="thumbnail html-bg">
+        HTML
+        <div class="play">▶</div>
+      </div>
+
+      <div class="card-content">
+
+        <div class="tags">
+          <span class="tag">HTML</span>
+          <span class="tag basic">Basic</span>
+        </div>
+
+        <h3>Introduction to HTML</h3>
+
+        <p>
+          Learn what HTML is and understand how webpages are
+          structured.
+        </p>
+
+        <div class="card-info">
+          <span>📺 Video Tutorial</span>
+          <span>Beginner</span>
+        </div>
+
+        <button
+          class="watch-btn"
+          onclick="watchTutorial('HTML tutorial for beginners')"
+        >
+          ▶ Watch Tutorial
+        </button>
+
+      </div>
+    </div>
+
+
+    <!-- HTML 2 -->
+
+    <div class="card tutorial"
+         data-category="html"
+         data-title="html tags elements">
+
+      <div class="thumbnail html-bg">
+        &lt;/&gt;
+        <div class="play">▶</div>
+      </div>
+
+      <div class="card-content">
+
+        <div class="tags">
+          <span class="tag">HTML</span>
+          <span class="tag basic">Basic</span>
+        </div>
+
+        <h3>HTML Tags & Elements</h3>
+
+        <p>
+          Learn headings, paragraphs, links, images, buttons,
+          and common HTML elements.
+        </p>
+
+        <div class="card-info">
+          <span>📺 Video Tutorial</span>
+          <span>Beginner</span>
+        </div>
+
+        <button
+          class="watch-btn"
+          onclick="watchTutorial('HTML tags and elements tutorial')"
+        >
+          ▶ Watch Tutorial
+        </button>
+
+      </div>
+    </div>
+
+
+    <!-- JAVA 1 -->
+
+    <div class="card tutorial"
+         data-category="java"
+         data-title="java introduction beginner">
+
+      <div class="thumbnail java-bg">
+        ☕
+        <div class="play">▶</div>
+      </div>
+
+      <div class="card-content">
+
+        <div class="tags">
+          <span class="tag">JAVA</span>
+          <span class="tag basic">Basic</span>
+        </div>
+
+        <h3>Introduction to Java</h3>
+
+        <p>
+          Understand Java syntax and create your first Java
+          program.
+        </p>
+
+        <div class="card-info">
+          <span>📺 Video Tutorial</span>
+          <span>Beginner</span>
+        </div>
+
+        <button
+          class="watch-btn"
+          onclick="watchTutorial('Java programming tutorial for beginners')"
+        >
+          ▶ Watch Tutorial
+        </button>
+
+      </div>
+    </div>
+
+
+    <!-- JAVA 2 -->
+
+    <div class="card tutorial"
+         data-category="java"
+         data-title="java variables data types">
+
+      <div class="thumbnail java-bg">
+        int
+        <div class="play">▶</div>
+      </div>
+
+      <div class="card-content">
+
+        <div class="tags">
+          <span class="tag">JAVA</span>
+          <span class="tag basic">Basic</span>
+        </div>
+
+        <h3>Variables & Data Types</h3>
+
+        <p>
+          Learn Java variables, integers, strings, booleans,
+          doubles, and user input.
+        </p>
+
+        <div class="card-info">
+          <span>📺 Video Tutorial</span>
+          <span>Beginner</span>
+        </div>
+
+        <button
+          class="watch-btn"
+          onclick="watchTutorial('Java variables and data types tutorial')"
+        >
+          ▶ Watch Tutorial
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- INTERMEDIATE -->
+
+  <div class="level-title">
+    <div class="level-dot intermediate-dot"></div>
+    <h2>Intermediate</h2>
+  </div>
+
+  <div class="tutorial-grid">
+
+    <!-- HTML -->
+
+    <div class="card tutorial"
+         data-category="html"
+         data-title="html forms">
+
+      <div class="thumbnail html-bg">
+        FORM
+        <div class="play">▶</div>
+      </div>
+
+      <div class="card-content">
+
+        <div class="tags">
+          <span class="tag">HTML</span>
+          <span class="tag intermediate">Intermediate</span>
+        </div>
+
+        <h3>HTML Forms</h3>
+
+        <p>
+          Learn text fields, passwords, radio buttons,
+          checkboxes and form submission.
+        </p>
+
+        <div class="card-info">
+          <span>📺 Video Tutorial</span>
+          <span>Intermediate</span>
+        </div>
+
+        <button
+          class="watch-btn"
+          onclick="watchTutorial('HTML forms complete tutorial')"
+        >
+          ▶ Watch Tutorial
+        </button>
+
+      </div>
+    </div>
+
+
+    <!-- HTML -->
+
+    <div class="card tutorial"
+         data-category="html"
+         data-title="semantic html">
+
+      <div class="thumbnail html-bg">
+        SEO
+        <div class="play">▶</div>
+      </div>
+
+      <div class="card-content">
+
+        <div class="tags">
+          <span class="tag">HTML</span>
+          <span class="tag intermediate">Intermediate</span>
+        </div>
+
+        <h3>Semantic HTML</h3>
+
+        <p>
+          Learn header, nav, section, article, main and footer
+          elements.
+        </p>
+
+        <div class="card-info">
+          <span>📺 Video Tutorial</span>
+          <span>Intermediate</span>
+        </div>
+
+        <button
+          class="watch-btn"
+          onclick="watchTutorial('Semantic HTML tutorial')"
+        >
+          ▶ Watch Tutorial
+        </button>
+
+      </div>
+    </div>
+
+
+    <!-- JAVA -->
+
+    <div class="card tutorial"
+         data-category="java"
+         data-title="java conditions loops">
+
+      <div class="thumbnail java-bg">
+        LOOP
+        <div class="play">▶</div>
+      </div>
+
+      <div class="card-content">
+
+        <div class="tags">
+          <span class="tag">JAVA</span>
+          <span class="tag intermediate">Intermediate</span>
+        </div>
+
+        <h3>Conditions & Loops</h3>
+
+        <p>
+          Learn if statements, switch statements, for loops
+          and while loops.
+        </p>
+
+        <div class="card-info">
+          <span>📺 Video Tutorial</span>
+          <span>Intermediate</span>
+        </div>
+
+        <button
+          class="watch-btn"
+          onclick="watchTutorial('Java if statements and loops tutorial')"
+        >
+          ▶ Watch Tutorial
+        </button>
+
+      </div>
+    </div>
+
+
+    <!-- JAVA -->
+
+    <div class="card tutorial"
+         data-category="java"
+         data-title="java arrays methods">
+
+      <div class="thumbnail java-bg">
+        [ ]
+        <div class="play">▶</div>
+      </div>
+
+      <div class="card-content">
+
+        <div class="tags">
+          <span class="tag">JAVA</span>
+          <span class="tag intermediate">Intermediate</span>
+        </div>
+
+        <h3>Arrays & Methods</h3>
+
+        <p>
+          Learn how to organize multiple values and create
+          reusable methods.
+        </p>
+
+        <div class="card-info">
+          <span>📺 Video Tutorial</span>
+          <span>Intermediate</span>
+        </div>
+
+        <button
+          class="watch-btn"
+          onclick="watchTutorial('Java arrays and methods tutorial')"
+        >
+          ▶ Watch Tutorial
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ADVANCED -->
+
+  <div class="level-title">
+    <div class="level-dot advanced-dot"></div>
+    <h2>Advanced</h2>
+  </div>
+
+  <div class="tutorial-grid">
+
+    <!-- HTML -->
+
+    <div class="card tutorial"
+         data-category="html"
+         data-title="advanced html accessibility">
+
+      <div class="thumbnail html-bg">
+        A11Y
+        <div class="play">▶</div>
+      </div>
+
+      <div class="card-content">
+
+        <div class="tags">
+          <span class="tag">HTML</span>
+          <span class="tag advanced">Advanced</span>
+        </div>
+
+        <h3>HTML Accessibility</h3>
+
+        <p>
+          Learn accessibility techniques to create webpages
+          that are easier for everyone to use.
+        </p>
+
+        <div class="card-info">
+          <span>📺 Video Tutorial</span>
+          <span>Advanced</span>
+        </div>
+
+        <button
+          class="watch-btn"
+          onclick="watchTutorial('HTML accessibility tutorial')"
+        >
+          ▶ Watch Tutorial
+        </button>
+
+      </div>
+    </div>
+
+
+    <!-- JAVA -->
+
+    <div class="card tutorial"
+         data-category="java"
+         data-title="java object oriented programming oop">
+
+      <div class="thumbnail java-bg">
+        OOP
+        <div class="play">▶</div>
+      </div>
+
+      <div class="card-content">
+
+        <div class="tags">
+          <span class="tag">JAVA</span>
+          <span class="tag advanced">Advanced</span>
+        </div>
+
+        <h3>Object-Oriented Programming</h3>
+
+        <p>
+          Learn classes, objects, inheritance,
+          encapsulation and polymorphism.
+        </p>
+
+        <div class="card-info">
+          <span>📺 Video Tutorial</span>
+          <span>Advanced</span>
+        </div>
+
+        <button
+          class="watch-btn"
+          onclick="watchTutorial('Java OOP complete tutorial')"
+        >
+          ▶ Watch Tutorial
+        </button>
+
+      </div>
+    </div>
+
+
+    <!-- JAVA -->
+
+    <div class="card tutorial"
+         data-category="java"
+         data-title="java exception handling">
+
+      <div class="thumbnail java-bg">
+        try
+        <div class="play">▶</div>
+      </div>
+
+      <div class="card-content">
+
+        <div class="tags">
+          <span class="tag">JAVA</span>
+          <span class="tag advanced">Advanced</span>
+        </div>
+
+        <h3>Exception Handling</h3>
+
+        <p>
+          Learn try, catch, finally and how Java handles
+          program errors.
+        </p>
+
+        <div class="card-info">
+          <span>📺 Video Tutorial</span>
+          <span>Advanced</span>
+        </div>
+
+        <button
+          class="watch-btn"
+          onclick="watchTutorial('Java exception handling tutorial')"
+        >
+          ▶ Watch Tutorial
+        </button>
+
+      </div>
+    </div>
+
+
+    <!-- JAVA -->
+
+    <div class="card tutorial"
+         data-category="java"
+         data-title="java collections framework">
+
+      <div class="thumbnail java-bg">
+        LIST
+        <div class="play">▶</div>
+      </div>
+
+      <div class="card-content">
+
+        <div class="tags">
+          <span class="tag">JAVA</span>
+          <span class="tag advanced">Advanced</span>
+        </div>
+
+        <h3>Java Collections</h3>
+
+        <p>
+          Learn ArrayList, HashMap, HashSet and Java's
+          collections framework.
+        </p>
+
+        <div class="card-info">
+          <span>📺 Video Tutorial</span>
+          <span>Advanced</span>
+        </div>
+
+        <button
+          class="watch-btn"
+          onclick="watchTutorial('Java collections framework tutorial')"
+        >
+          ▶ Watch Tutorial
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- PROGRESS -->
+
+  <section class="progress-section" id="progress">
+
+    <h2>🚀 Your Learning Progress</h2>
+
+    <p>
+      Videos you open are automatically counted as started lessons.
+    </p>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <p id="progressText">
+      0 of 12 lessons started
+    </p>
+
+    <br>
+
+    <button class="btn btn-secondary" onclick="resetProgress()">
+      Reset Progress
+    </button>
+
+  </section>
+
+</main>
+
+
+<footer>
+  <p>
+    &copy; 2026 CodeSkill Academy • Learn. Code. Create.
+  </p>
+</footer>
+
+
+<script>
+
+  let currentFilter = "all";
+
+  const tutorials =
+    document.querySelectorAll(".tutorial");
+
+  const searchInput =
+    document.getElementById("searchInput");
+
+
+  // SEARCH FUNCTION
+
+  searchInput.addEventListener("input", displayTutorials);
+
+
+  function filterTutorials(category, button) {
+
+    currentFilter = category;
+
+    document.querySelectorAll(".filter-btn")
+      .forEach(btn => {
+        btn.classList.remove("active");
+      });
+
+    button.classList.add("active");
+
+    displayTutorials();
+  }
+
+
+  function displayTutorials() {
+
+    const search =
+      searchInput.value.toLowerCase();
+
+    tutorials.forEach(card => {
+
+      const category =
+        card.dataset.category;
+
+      const title =
+        card.dataset.title.toLowerCase();
+
+      const matchesCategory =
+        currentFilter === "all" ||
+        category === currentFilter;
+
+      const matchesSearch =
+        title.includes(search) ||
+        card.innerText.toLowerCase().includes(search);
+
+      if(matchesCategory && matchesSearch) {
+        card.style.display = "block";
+      }
+
+      else {
+        card.style.display = "none";
+      }
+
+    });
+  }
+
+
+  // TUTORIAL BUTTON
+
+  function watchTutorial(searchTerm) {
+
+    saveProgress(searchTerm);
+
+    const query =
+      encodeURIComponent(searchTerm);
+
+    window.open(
+      "https://www.youtube.com/results?search_query=" + query,
+      "_blank"
+    );
+  }
+
+
+  // PROGRESS SYSTEM
+
+  function saveProgress(tutorial) {
+
+    let completed =
+      JSON.parse(
+        localStorage.getItem("codingProgress")
+      ) || [];
+
+    if(!completed.includes(tutorial)) {
+      completed.push(tutorial);
+    }
+
+    localStorage.setItem(
+      "codingProgress",
+      JSON.stringify(completed)
+    );
+
+    updateProgress();
+  }
+
+
+  function updateProgress() {
+
+    const completed =
+      JSON.parse(
+        localStorage.getItem("codingProgress")
+      ) || [];
+
+    const total = 12;
+
+    const percent =
+      Math.min(
+        (completed.length / total) * 100,
+        100
+      );
+
+    document.getElementById("progressFill")
+      .style.width = percent + "%";
+
+    document.getElementById("progressText")
+      .innerText =
+        completed.length +
+        " of " +
+        total +
+        " lessons started";
+  }
+
+
+  function resetProgress() {
+
+    localStorage.removeItem("codingProgress");
+
+    updateProgress();
+  }
+
+
+  updateProgress();
+
+</script>
+
+</body>
+</html>
